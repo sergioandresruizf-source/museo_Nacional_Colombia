@@ -3,206 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museo Virtual - Museo Nacional de Colombia</title>
-    <!-- Tailwind CSS para el diseño base -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fuentes de Google: Playfair Display (Serif clásico) y Lato (Sans-serif legible) -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Museo Nacional de Colombia - Virtual</title>
     
+    <!-- ==========================================
+         AQUÍ VAN TODOS LOS ESTILOS (CSS)
+         ========================================== -->
     <style>
-        /* Estilos Personalizados para la estética del Museo */
-        :root {
-            --wood-color-1: #3e2723;
-            --wood-color-2: #4e342e;
+        /* Reseteo básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
         }
 
         body {
-            font-family: 'Lato', sans-serif;
-            margin: 0;
-            overflow: hidden; /* Previene scroll general, lo manejaremos por vistas */
-            background-color: #000;
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* --- Sistema de Vistas --- */
-        .view-section {
-            position: absolute !important; /* Fuerza la posición para que no se desplacen fuera de pantalla */
+        /* Sistema de Vistas (Esconde y muestra las pantallas) */
+        .view {
+            display: none;
+            width: 100vw;
+            min-height: 100vh;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            opacity: 0;
-            visibility: hidden; /* Asegura que no interactúen cuando están ocultas */
-            pointer-events: none;
-            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
-            transform: scale(0.98);
-            overflow: hidden; /* Evita scrolls inesperados */
-            z-index: 1;
         }
 
-        .view-section.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: scale(1);
-            z-index: 10; /* Coloca la vista actual por encima de las demás */
-        }
-
-        /* --- Fondos y Entornos --- */
-        .wall-normal {
-            background-color: #e5e5f7;
-            background-image:  radial-gradient(#c6c6cc 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        .wall-censored {
-            background-color: #1a1a1a;
-            background-image: linear-gradient(30deg, #111 12%, transparent 12.5%, transparent 87%, #111 87.5%, #111), linear-gradient(150deg, #111 12%, transparent 12.5%, transparent 87%, #111 87.5%, #111), linear-gradient(30deg, #111 12%, transparent 12.5%, transparent 87%, #111 87.5%, #111), linear-gradient(150deg, #111 12%, transparent 12.5%, transparent 87%, #111 87.5%, #111), linear-gradient(60deg, #1a1a1a 25%, transparent 25.5%, transparent 75%, #1a1a1a 75%, #1a1a1a), linear-gradient(60deg, #1a1a1a 25%, transparent 25.5%, transparent 75%, #1a1a1a 75%, #1a1a1a);
-            background-size: 80px 140px;
-            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
-        }
-
-        .wooden-floor {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 25vh; /* Altura del piso */
-            background: linear-gradient(to bottom, #111 0%, transparent 15%), 
-                        repeating-linear-gradient(to right, var(--wood-color-1), var(--wood-color-1) 100px, var(--wood-color-2) 100px, var(--wood-color-2) 102px);
-            z-index: -1;
-            perspective: 1000px;
-            transform-origin: bottom;
-        }
-
-        /* --- Elementos de Arte --- */
-        .gallery-container {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-            height: 100%;
-            padding: 10vh 5vw 30vh 5vw; /* Espacio para el piso y arriba */
-            scroll-snap-type: x mandatory;
-            align-items: center;
-            gap: 10vw;
-        }
-
-        .artwork-wrapper {
-            flex: 0 0 auto;
-            width: 300px;
-            scroll-snap-align: center;
+        .view.active {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            position: relative;
         }
 
-        @media (min-width: 768px) {
-            .artwork-wrapper { width: 400px; }
+        /* Botones Generales */
+        button {
+            padding: 10px 20px;
+            background-color: #d4af37; /* Dorado de museo */
+            color: #111;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
-        /* Iluminación tipo museo */
-        .spotlight {
+        button:hover {
+            background-color: #b5952f;
+        }
+
+        .back-btn {
             position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 255, 230, 0.4) 0%, rgba(255,255,255,0) 60%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        .spotlight-censored {
-            background: radial-gradient(circle, rgba(150, 20, 20, 0.25) 0%, rgba(0,0,0,0) 60%);
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background-color: #444;
+            color: #fff;
         }
 
-        /* Marcos */
-        .frame {
-            width: 100%;
-            aspect-ratio: 3/4;
-            background-color: #ddd;
-            position: relative;
-            box-shadow: 10px 15px 25px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
+        .back-btn:hover {
+            background-color: #666;
+        }
+
+        /* Vista Entrada */
+        #view-entrada {
+            /* Imagen de fondo genérica para la fachada */
+            background: url('https://picsum.photos/1920/1080?grayscale') center/cover no-repeat;
             justify-content: center;
-            overflow: hidden;
+            align-items: center;
         }
 
-        .frame-gold {
-            border: 15px solid #b89947;
-            border-image: linear-gradient(45deg, #b89947, #e6d385, #b89947, #7a5c18) 1;
+        .entrance-container {
+            background: rgba(0, 0, 0, 0.75);
+            padding: 50px;
+            border-radius: 10px;
+            text-align: center;
         }
 
-        .frame-dark {
-            border: 15px solid #222;
-            border-image: linear-gradient(45deg, #111, #333, #111, #000) 1;
-            box-shadow: 10px 15px 30px rgba(0,0,0,0.8), inset 0 0 50px rgba(0,0,0,0.8);
+        .entrance-container h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #d4af37;
         }
 
-        /* Imágenes dentro del marco (usar tag img cuando se inserten) */
-        .frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Placas Descriptivas */
-        .placard {
-            background-color: #fdfdfd;
-            border: 1px solid #ccc;
-            padding: 1rem 1.5rem;
-            margin-top: 2rem;
-            width: 80%;
-            box-shadow: 2px 5px 10px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .placard-normal {
-            border-left: 4px solid #b89947;
-        }
-
-        .placard-censored {
-            background-color: #1a1a1a;
-            color: #ddd;
-            border: 1px solid #333;
-            border-left: 4px solid #8b0000;
-        }
-
-        /* Barras de scroll estéticas */
-        ::-webkit-scrollbar {
-            height: 12px;
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-        }
-        .wall-censored ::-webkit-scrollbar-thumb {
-            background: rgba(255,0,0,0.2);
-        }
-
-        /* Botón animado de entrada */
-        .enter-btn {
-            transition: all 0.3s ease;
-        }
-        .enter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
-        }
         /* Contenedor para organizar los botones de la entrada */
         .entrance-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px; /* Espacio entre los botones */
+            gap: 20px;
             margin-top: 20px;
         }
 
@@ -210,9 +101,7 @@
         .btn-secondary {
             background-color: #444; 
             color: #fff;
-            
-            /* Estas líneas hacen que el enlace <a> se vea idéntico a un botón */
-            text-decoration: none; /* Quita el subrayado típico de los links */
+            text-decoration: none;
             padding: 10px 20px;
             border-radius: 5px;
             font-size: 16px;
@@ -225,308 +114,280 @@
         .btn-secondary:hover {
             background-color: #666;
         }
+
+        /* Vista Lobby (Pasillo) */
+        #view-lobby {
+            background-color: #2c2c2c;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .doors-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .door {
+            background-color: #3a3a3a;
+            width: 250px;
+            height: 380px;
+            border: 3px solid #555;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            padding: 20px;
+        }
+
+        .door:hover {
+            transform: scale(1.05);
+            border-color: #d4af37;
+        }
+
+        .door-censored {
+            background-color: #1a0000;
+            border-color: #500;
+        }
+
+        .door-censored:hover {
+            border-color: #ff0000;
+        }
+
+        .door-censored h3 {
+            color: #ff4444;
+            font-size: 1.5rem;
+        }
+
+        /* Galerías */
+        .gallery {
+            background-color: #222;
+            overflow-y: auto; /* Permite scroll vertical si hay muchas obras */
+            align-items: center;
+            padding-bottom: 50px;
+        }
+
+        .censored-gallery {
+            background-color: #0a0a0a;
+        }
+
+        .gallery-header {
+            text-align: center;
+            width: 100%;
+            padding: 80px 20px 30px;
+            position: relative;
+        }
+
+        .gallery-header h2 {
+            color: #d4af37;
+            font-size: 2.5rem;
+        }
+
+        .censored-gallery .gallery-header h2 {
+            color: #666;
+        }
+
+        .warning-banner {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #ff4444;
+            background-color: rgba(255, 0, 0, 0.1);
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        /* Contenedor de Obras */
+        .artworks-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .artwork-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 320px;
+        }
+
+        .frame {
+            background-color: #000;
+            padding: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.2);
+            border: 10px solid #4a3b2c; /* Color de marco de madera */
+            margin-bottom: 20px;
+        }
+
+        .censored-gallery .frame {
+            border-color: #1a1a1a; /* Marco oscuro y desgastado para censura */
+        }
+
+        .frame img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Placa descriptiva */
+        .placard {
+            background-color: #e8e8e8;
+            color: #222;
+            padding: 15px;
+            border-radius: 2px;
+            text-align: left;
+            width: 90%;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .placard h4 {
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .placard p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
+
+    <!-- ==========================================
+         AQUÍ EMPIEZA LA ESTRUCTURA HTML
+         ========================================== -->
 
     <!-- VISTA 1: ENTRADA -->
     <div id="view-entrada" class="view active">
         <div class="entrance-container">
             <h1>Museo Nacional de Colombia</h1>
             <div class="entrance-buttons">
-                <!-- Aquí está el link real con la etiqueta <a> -->
-                <a href="https://sergioandresruizf-source.github.io/museos_Bogota/" class="btn-secondary">Volver al mapa</a>
+                <!-- Enlace para volver al mapa (Cambia mapa.html por el enlace real) -->
+                <a href="mapa.html" class="btn-secondary">Volver al mapa</a>
                 
                 <button onclick="switchView('view-lobby')">Entrar al Museo</button>
             </div>
         </div>
     </div>
 
+    <!-- VISTA 2: SELECCIÓN (Lobby) -->
+    <div id="view-lobby" class="view">
+        <button class="back-btn" onclick="switchView('view-entrada')">Volver a la entrada</button>
+        <h2>Pasillo Principal</h2>
+        <div class="doors-container">
+            <!-- Puerta Normal -->
+            <div class="door" onclick="switchView('view-exposiciones')">
+                <h3>Exposiciones</h3>
+                <p>Colección permanente</p>
+            </div>
+            <!-- Puerta Censura -->
+            <div class="door door-censored" onclick="switchView('view-censura')">
+                <h3>Prohibido entrar 🚫</h3>
+            </div>
+        </div>
+    </div>
 
-    <!-- ==========================================
-         VISTA 2: VESTÍBULO (LOBBY)
-         ========================================== -->
-    <section id="view-lobby" class="view-section bg-stone-200">
-        <div class="absolute inset-0 wall-normal opacity-50 z-0"></div>
-        <div class="wooden-floor"></div>
+    <!-- VISTA 3: EXPOSICIONES NORMALES -->
+    <div id="view-exposiciones" class="view gallery">
+        <div class="gallery-header">
+            <button class="back-btn" onclick="switchView('view-lobby')">Volver a la selección</button>
+            <h2>Exposiciones Oficiales</h2>
+        </div>
+        
+        <div class="artworks-container">
+            <!-- Obra Normal 1 -->
+            <div class="artwork-wrapper">
+                <div class="frame">
+                    <img src="https://picsum.photos/300/400?random=1" alt="Obra de prueba 1">
+                </div>
+                <div class="placard">
+                    <h4>Retrato Histórico</h4>
+                    <p><strong>Autor:</strong> Anónimo</p>
+                    <p>Representación de la historia oficial de Colombia y sus próceres.</p>
+                </div>
+            </div>
+            
+            <!-- Obra Normal 2 -->
+            <div class="artwork-wrapper">
+                <div class="frame">
+                    <img src="https://picsum.photos/400/300?random=2" alt="Obra de prueba 2">
+                </div>
+                <div class="placard">
+                    <h4>Paisaje Andino</h4>
+                    <p><strong>Autor:</strong> Artista Nacional</p>
+                    <p>Óleo sobre lienzo que muestra la diversidad geográfica del país.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="relative z-10 container mx-auto h-full flex flex-col items-center pt-20 px-4">
-            <h2 class="text-4xl md:text-5xl font-serif text-stone-800 mb-4 text-center border-b border-stone-400 pb-4">Vestíbulo Principal</h2>
-            <p class="text-stone-600 text-center mb-16 max-w-xl text-lg">Por favor, seleccione la sala que desea visitar. Cada ruta ofrece una perspectiva diferente de nuestra colección histórica.</p>
-
-            <div class="flex flex-col md:flex-row gap-8 md:gap-16 w-full max-w-5xl justify-center">
-                
-                <!-- Puerta: Exposiciones Normales -->
-                <div onclick="navigateTo('view-exposiciones')" class="cursor-pointer group flex-1 bg-white p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-yellow-600 rounded-sm flex flex-col items-center text-center">
-                    <div class="w-24 h-24 rounded-full bg-stone-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-12 h-12 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+    <!-- VISTA 4: CENSURA -->
+    <div id="view-censura" class="view gallery censored-gallery">
+        <div class="gallery-header">
+            <button class="back-btn" onclick="switchView('view-lobby')">Volver a la selección</button>
+            <div class="warning-banner">⚠️ Usted ha entrado a la sección censurada del museo ⚠️</div>
+            <h2>Obras Retiradas</h2>
+        </div>
+        
+        <div class="artworks-container">
+            <!-- Obra Censurada 1 -->
+            <div class="artwork-wrapper">
+                <div class="frame">
+                    <img src="https://picsum.photos/300/400?random=10" alt="Obra Censurada 1">
                     </div>
-                    <h3 class="text-3xl font-serif text-stone-800 mb-4">Exposiciones</h3>
-                    <p class="text-stone-600">Recorra las colecciones clásicas, obras de arte representativas y el patrimonio cultural oficial de la nación.</p>
+                <div class="placard">
+                    <h4>Realidad Oculta</h4>
+                    <p><strong>Autor:</strong> Artista Disidente</p>
+                    <p>Obra retirada en 19XX por su fuerte crítica a las instituciones sociopolíticas de la época.</p>
                 </div>
-
-                <!-- Puerta: Censura -->
-                <div onclick="navigateTo('view-censura')" class="cursor-pointer group flex-1 bg-stone-900 p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-red-700 rounded-sm flex flex-col items-center justify-center text-center">
-                    <div class="w-24 h-24 rounded-full bg-stone-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <span class="text-5xl">🚫</span>
-                    </div>
-                    <h3 class="text-3xl font-serif text-white">Prohibido entrar</h3>
-                </div>
-
             </div>
-
-            <!-- Botón Volver a Entrada -->
-            <button onclick="navigateTo('view-entrance')" class="mt-16 text-stone-500 hover:text-stone-800 transition-colors flex items-center gap-2 font-bold text-lg">
-                <span class="text-2xl">&larr;</span> Volver a la pantalla anterior (Entrada)
-            </button>
+            
+            <!-- Obra Censurada 2 -->
+            <div class="artwork-wrapper">
+                <div class="frame">
+                    <img src="https://picsum.photos/400/300?random=11" alt="Obra Censurada 2">
+                </div>
+                <div class="placard">
+                    <h4>El Paro</h4>
+                    <p><strong>Autor:</strong> Colectivo Independiente</p>
+                    <p>Registro fotográfico de protestas y eventos no documentados en los archivos oficiales.</p>
+                </div>
+            </div>
         </div>
-    </section>
-
+    </div>
 
     <!-- ==========================================
-         VISTA 3: SALA DE EXPOSICIONES
+         AQUÍ VA EL FUNCIONAMIENTO (JAVASCRIPT)
          ========================================== -->
-    <section id="view-exposiciones" class="view-section wall-normal relative">
-        <div class="wooden-floor"></div>
-
-        <!-- Encabezado de la Sala -->
-        <div class="absolute top-0 left-0 w-full p-6 z-20 flex justify-between items-center bg-gradient-to-b from-white to-transparent">
-            <button onclick="navigateTo('view-lobby')" class="px-4 py-2 bg-stone-800 text-white rounded text-sm hover:bg-stone-600 transition shadow-lg flex items-center gap-2">
-                <span class="text-lg">&larr;</span> Volver a la selección
-            </button>
-            <h2 class="text-2xl md:text-3xl font-serif text-stone-800 drop-shadow-md">Sala de Exposiciones Permanentes</h2>
-            <div class="w-40"></div> <!-- Spacer para centrar el titulo -->
-        </div>
-
-        <!-- Galería Horizontal (Aquí insertas las obras) -->
-        <div class="gallery-container relative z-10" id="exposiciones-gallery">
-            
-            <!-- OBRA 1 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/bolivar/400/500" alt="Retrato Oficial" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">El Libertador en Campaña</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">José María Espinosa, 1828</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Retrato oficial que exalta la figura heroica del libertador Simón Bolívar durante las campañas del sur. Una pieza fundamental de la iconografía patria.</p>
-                </div>
-            </div>
-
-            <!-- OBRA 2 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/paisaje/400/500" alt="Paisaje Sabana" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Valle de los Alcázares</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">Andrés de Santa María, 1895</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Una visión impresionista de la Sabana de Bogotá. La obra captura la luz andina y refleja la tranquilidad de los territorios centrales del país.</p>
-                </div>
-            </div>
-
-            <!-- OBRA 3 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/ceramica/400/500" alt="Cerámica Precolombina" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Poporo Quimbaya (Réplica visual)</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">Cultura Quimbaya, 300 d.C.</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Representación de las maestras obras de orfebrería de las culturas prehispánicas, símbolo del patrimonio cultural y la identidad indígena de Colombia.</p>
-                </div>
-            </div>
-
-            <!-- OBRA 4 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/batalla/400/500" alt="Escena de Batalla" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Batalla de Boyacá</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">Martín Tovar y Tovar, 1890</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Pintura épica que ilustra el triunfo definitivo de las tropas independentistas sobre el ejército realista el 7 de agosto de 1819.</p>
-                </div>
-            </div>
-            
-            <!-- OBRA 5 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/botanica/400/500" alt="Expedición Botánica" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Lámina de la Flora de la Real Expedición</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">Taller de José Celestino Mutis, 1790</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Detallada ilustración científica que muestra la inmensa biodiversidad del Virreinato de la Nueva Granada, uniendo ciencia y arte.</p>
-                </div>
-            </div>
-
-            <!-- OBRA 6 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight"></div>
-                <div class="frame frame-gold">
-                    <img src="https://picsum.photos/seed/mercado/400/500" alt="Mercado Campesino" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
-                </div>
-                <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Día de Mercado en la Plaza</h4>
-                    <p class="text-sm font-bold text-stone-600 mb-3">Fidolo Alfonso González Camargo, 1920</p>
-                    <p class="text-sm text-stone-500 leading-relaxed">Costumbrismo puro que retrata la cotidianidad, las vestimentas y el mestizaje en los pueblos colombianos a principios del siglo XX.</p>
-                </div>
-            </div>
-
-            <!-- Espacio final para scroll -->
-            <div class="flex-shrink-0 w-20"></div>
-        </div>
-    </section>
-
-
-    <!-- ==========================================
-         VISTA 4: SALA DE CENSURA
-         ========================================== -->
-    <section id="view-censura" class="view-section wall-censored relative">
-        <div class="wooden-floor" style="filter: brightness(0.4);"></div>
-
-        <!-- Encabezado de la Sala -->
-        <div class="absolute top-0 left-0 w-full p-6 z-20 flex justify-between items-center bg-gradient-to-b from-black to-transparent">
-            <button onclick="navigateTo('view-lobby')" class="px-4 py-2 bg-stone-200 text-stone-900 rounded text-sm hover:bg-white transition shadow-lg flex items-center gap-2">
-                <span class="text-lg">&larr;</span> Volver a la selección
-            </button>
-            <h2 class="text-2xl md:text-3xl font-serif text-red-500 drop-shadow-md flex items-center gap-2">
-                <span>🚫</span> Sala de Censura
-            </h2>
-            <div class="w-40"></div> <!-- Spacer -->
-        </div>
-
-        <!-- Galería Horizontal Oscura (Aquí insertas las obras prohibidas) -->
-        <div class="gallery-container relative z-10" id="censura-gallery">
-            
-            <!-- Letrero de Advertencia Inicial -->
-            <div class="artwork-wrapper" style="justify-content: center; padding-right: 5vw;">
-                <div class="bg-stone-900 border-l-4 border-red-700 p-10 shadow-2xl relative text-center min-w-[300px]">
-                    <div class="text-red-500 text-6xl mb-6">⚠️</div>
-                    <h3 class="text-2xl md:text-3xl font-serif text-white leading-relaxed">
-                        Usted ha entrado a la<br>sección censurada del museo.
-                    </h3>
-                </div>
-            </div>
-
-            <!-- OBRA CENSURADA 1 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/violencia/400/500?grayscale" alt="La Violencia" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">Los Rostros del Silencio</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Alejandro Obregón (Aproximación), 1962</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Ocultada durante años por representar explícitamente el dolor del periodo conocido como "La Violencia". Las autoridades consideraron que incitaba al odio partidista.</p>
-                </div>
-            </div>
-
-            <!-- OBRA CENSURADA 2 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/huelga/400/500?grayscale" alt="Huelga censurada" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">Fotografía: Zona Bananera</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Archivo Desconocido, 1928</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Registro fotográfico de las protestas obreras antes de la masacre. El gobierno de la época confiscó y destruyó las copias originales para encubrir la magnitud del evento.</p>
-                </div>
-            </div>
-
-            <!-- OBRA CENSURADA 3 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/caricatura/400/500" alt="Caricatura prohibida" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">El Dictador de Papel</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Ricardo Rendón, 1930</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Caricatura que ridiculizaba la corrupción militar y política. Fue prohibida su circulación en la prensa nacional y resultó en el exilio temporal de sus promotores.</p>
-                </div>
-            </div>
-
-            <!-- OBRA CENSURADA 4 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/bogotazo/400/500?grayscale" alt="Bogotazo" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">Las Llamas del Nueve de Abril</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Sady González, 1948</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Captura del caos en el centro de Bogotá tras el asesinato de Gaitán. Retirada temporalmente de exhibiciones públicas en los años 50 bajo estado de sitio.</p>
-                </div>
-            </div>
-            
-            <!-- OBRA CENSURADA 5 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/inmoral/400/500" alt="Obra inmoral" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">El Deseo Culpable</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Anónimo, Finales del Siglo XIX</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Retirada de las galerías bogotanas por la iglesia en 1890, acusada de ser una "provocación a la moral y las buenas costumbres de las señoritas" por mostrar piel al descubierto.</p>
-                </div>
-            </div>
-
-            <!-- OBRA CENSURADA 6 -->
-            <div class="artwork-wrapper">
-                <div class="spotlight spotlight-censored"></div>
-                <div class="frame frame-dark bg-stone-900">
-                    <img src="https://picsum.photos/seed/panfleto/400/500?grayscale" alt="Panfleto" onerror="this.src='https://placehold.co/400x500/000000/ff0000?text=Error'">
-                </div>
-                <div class="placard placard-censored">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-red-400">La Voz del Oprimido</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Imprenta Clandestina, 1970</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Cartel incautado durante las redadas estudiantiles. Documenta los intentos del arte urbano por denunciar abusos de poder, censurado sistemáticamente en los muros de la capital.</p>
-                </div>
-            </div>
-
-            <!-- Espacio final para scroll -->
-            <div class="flex-shrink-0 w-20"></div>
-        </div>
-    </section>
-
-    <!-- Script de Navegación -->
     <script>
-        /**
-         * Función para cambiar entre vistas simulando el caminar por el museo.
-         * Oculta todas las secciones y muestra solo la sección de destino (targetId).
-         */
-        function navigateTo(targetId) {
-            // 1. Obtener todas las secciones de vista
-            const views = document.querySelectorAll('.view-section');
+        // Función para cambiar de vistas
+        function switchView(viewId) {
+            const views = document.querySelectorAll('.view');
             
-            // 2. Quitar la clase 'active' a todas
+            // Oculta todas las vistas
             views.forEach(view => {
                 view.classList.remove('active');
             });
             
-            const targetView = document.getElementById(targetId);
-            
-            // 3. Si la vista es una sala, reiniciar el scroll horizontal al inicio
-            if (targetId === 'view-exposiciones') {
-                const gallery = document.getElementById('exposiciones-gallery');
-                if (gallery) gallery.scrollLeft = 0;
-            } else if (targetId === 'view-censura') {
-                const gallery = document.getElementById('censura-gallery');
-                if (gallery) gallery.scrollLeft = 0;
-            }
-
-            // 4. Activar la nueva vista de forma inmediata (la transición suave la maneja el CSS)
+            // Muestra la vista seleccionada
+            const targetView = document.getElementById(viewId);
             if (targetView) {
                 targetView.classList.add('active');
+                window.scrollTo(0, 0); 
             }
         }
     </script>
