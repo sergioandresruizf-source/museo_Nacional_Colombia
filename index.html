@@ -206,10 +206,20 @@
             margin-top: 20px;
         }
 
-        /* Estilo para el botón secundario (Volver al mapa) */
+        /* Estilo para el enlace secundario (Volver al mapa) */
         .btn-secondary {
             background-color: #444; 
             color: #fff;
+            
+            /* Estas líneas hacen que el enlace <a> se vea idéntico a un botón */
+            text-decoration: none; /* Quita el subrayado típico de los links */
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background-color 0.3s;
+            text-align: center;
         }
 
         .btn-secondary:hover {
@@ -224,8 +234,9 @@
         <div class="entrance-container">
             <h1>Museo Nacional de Colombia</h1>
             <div class="entrance-buttons">
-                <!-- Cambia 'mapa.html' por el nombre real de tu archivo del mapa -->
-                <button class="btn-secondary" onclick="window.location.href='mapa.html'">Volver al mapa</button>
+                <!-- Aquí está el link real con la etiqueta <a> -->
+                <a href="https://sergioandresruizf-source.github.io/museos_Bogota/" class="btn-secondary">Volver al mapa</a>
+                
                 <button onclick="switchView('view-lobby')">Entrar al Museo</button>
             </div>
         </div>
