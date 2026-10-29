@@ -198,28 +198,38 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(255,255,255,0.2);
         }
+        /* Contenedor para organizar los botones de la entrada */
+        .entrance-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espacio entre los botones */
+            margin-top: 20px;
+        }
+
+        /* Estilo para el botón secundario (Volver al mapa) */
+        .btn-secondary {
+            background-color: #444; 
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #666;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================
-         VISTA 1: ENTRADA AL MUSEO
-         ========================================== -->
-    <section id="view-entrance" class="view-section active flex flex-col items-center justify-center bg-stone-900 text-white relative">
-        <!-- Fondo de entrada -->
-        <div class="absolute inset-0 bg-[url('https://placehold.co/1920x1080/2a2a2a/1a1a1a?text=Fachada+Museo')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
-        
-        <div class="relative z-10 text-center px-4 max-w-4xl">
-            <p class="text-sm md:text-lg tracking-[0.3em] uppercase text-gray-400 mb-4">Ministerio de Cultura</p>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">Museo Nacional<br><span class="text-3xl md:text-5xl text-yellow-500 font-light italic">de Colombia</span></h1>
-            <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-                Bienvenido a la experiencia virtual. Un recorrido por nuestra historia, nuestras memorias y los silencios que han marcado nuestra cultura.
-            </p>
-            
-            <button onclick="navigateTo('view-lobby')" class="enter-btn px-10 py-4 bg-transparent border border-white text-white font-serif text-xl tracking-widest uppercase hover:bg-white hover:text-black">
-                Entrar al Museo
-            </button>
+    <!-- VISTA 1: ENTRADA -->
+    <div id="view-entrada" class="view active">
+        <div class="entrance-container">
+            <h1>Museo Nacional de Colombia</h1>
+            <div class="entrance-buttons">
+                <!-- Cambia 'mapa.html' por el nombre real de tu archivo del mapa -->
+                <button class="btn-secondary" onclick="window.location.href='mapa.html'">Volver al mapa</button>
+                <button onclick="switchView('view-lobby')">Entrar al Museo</button>
+            </div>
         </div>
+    </div>
     </section>
 
 
