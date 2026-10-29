@@ -5,25 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museo Nacional de Colombia - Virtual</title>
     
-    <!-- ==========================================
-         AQUÍ VAN TODOS LOS ESTILOS (CSS)
-         ========================================== -->
+    <!-- Importar fuentes elegantes para el museo -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
-        /* Reseteo básico */
+        /* Reseteo y tipografía base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Georgia', serif;
         }
 
         body {
-            background-color: #1a1a1a;
+            background-color: #111;
             color: #f4f4f4;
             overflow-x: hidden;
+            font-family: 'Roboto', sans-serif; /* Fuente moderna para textos */
         }
 
-        /* Sistema de Vistas (Esconde y muestra las pantallas) */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif; /* Fuente elegante para títulos */
+            font-weight: 600;
+        }
+
+        /* Sistema de Vistas */
         .view {
             display: none;
             width: 100vw;
@@ -31,260 +36,350 @@
             position: absolute;
             top: 0;
             left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .view.active {
             display: flex;
             flex-direction: column;
+            opacity: 1;
+            z-index: 1;
         }
 
-        /* Botones Generales */
+        /* =========================================
+           BOTONES GENERALES
+           ========================================= */
         button {
-            padding: 10px 20px;
-            background-color: #d4af37; /* Dorado de museo */
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #d4af37, #aa8529);
             color: #111;
-            border: none;
-            border-radius: 5px;
+            border: 1px solid #ffdb70;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            font-family: 'Roboto', sans-serif;
             font-weight: bold;
-            transition: background-color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: #b5952f;
+            background: linear-gradient(135deg, #fcecae, #d4af37);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #444, #222);
+            color: #fff;
+            border: 1px solid #666;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #666, #444);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
         }
 
         .back-btn {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 25px;
+            left: 25px;
             z-index: 10;
-            background-color: #444;
-            color: #fff;
+            background: rgba(30, 30, 30, 0.8);
+            color: #ccc;
+            border: 1px solid #444;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .back-btn:hover {
-            background-color: #666;
+            background: rgba(60, 60, 60, 1);
+            color: #fff;
+            border-color: #888;
         }
 
-        /* Vista Entrada */
+        /* =========================================
+           VISTA 1: ENTRADA
+           ========================================= */
         #view-entrada {
-            /* Imagen de fondo genérica para la fachada */
-            background: url('https://picsum.photos/1920/1080?grayscale') center/cover no-repeat;
+            background: linear-gradient(rgba(10, 15, 20, 0.7), rgba(0, 0, 0, 0.9)), url('https://picsum.photos/1920/1080?random=100') center/cover no-repeat;
             justify-content: center;
             align-items: center;
         }
 
         .entrance-container {
-            background: rgba(0, 0, 0, 0.75);
-            padding: 50px;
-            border-radius: 10px;
+            background: rgba(15, 15, 15, 0.85);
+            padding: 60px 80px;
+            border-radius: 8px;
             text-align: center;
+            border: 1px solid #d4af37;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .entrance-container h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
             color: #d4af37;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.8);
+            letter-spacing: 2px;
         }
 
-        /* Contenedor para organizar los botones de la entrada */
         .entrance-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 30px;
         }
 
-        /* Estilo para el enlace secundario (Volver al mapa) */
-        .btn-secondary {
-            background-color: #444; 
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            display: inline-block;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .btn-secondary:hover {
-            background-color: #666;
-        }
-
-        /* Vista Lobby (Pasillo) */
+        /* =========================================
+           VISTA 2: LOBBY (Pasillo)
+           ========================================= */
         #view-lobby {
-            background-color: #2c2c2c;
+            /* Simula luz de techo cayendo sobre la pared */
+            background: radial-gradient(circle at top, #3a3f47 0%, #111317 80%);
             justify-content: center;
             align-items: center;
             text-align: center;
         }
 
+        #view-lobby h2 {
+            font-size: 3rem;
+            color: #eaeaea;
+            margin-bottom: 50px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+
         .doors-container {
             display: flex;
-            gap: 40px;
-            margin-top: 50px;
+            gap: 60px;
+            margin-top: 20px;
         }
 
         .door {
-            background-color: #3a3a3a;
-            width: 250px;
-            height: 380px;
-            border: 3px solid #555;
-            border-radius: 10px 10px 0 0;
+            background: linear-gradient(to bottom, #4a4a4a, #222);
+            width: 280px;
+            height: 420px;
+            border: 12px solid #1a1a1a;
+            border-radius: 8px 8px 0 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.3s, border-color 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.7), inset 0 0 40px rgba(0,0,0,0.6);
             padding: 20px;
+            position: relative;
+        }
+
+        .door::after {
+            /* Efecto de zócalo en la puerta */
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: -12px;
+            right: -12px;
+            height: 12px;
+            background: #0a0a0a;
+        }
+
+        .door h3 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .door p {
+            color: #aaa;
+            font-style: italic;
         }
 
         .door:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-10px);
             border-color: #d4af37;
+            box-shadow: 0 25px 40px rgba(212, 175, 55, 0.2), inset 0 0 50px rgba(255,255,255,0.1);
         }
 
         .door-censored {
-            background-color: #1a0000;
-            border-color: #500;
+            background: linear-gradient(to bottom, #2b0808, #110000);
+            border-color: #0d0000;
         }
 
         .door-censored:hover {
-            border-color: #ff0000;
+            border-color: #ff3333;
+            box-shadow: 0 25px 40px rgba(255, 0, 0, 0.3), inset 0 0 50px rgba(255,0,0,0.1);
         }
 
         .door-censored h3 {
             color: #ff4444;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
-        /* Galerías */
+        /* =========================================
+           VISTAS 3 Y 4: GALERÍAS
+           ========================================= */
         .gallery {
-            background-color: #222;
-            overflow-y: auto; /* Permite scroll vertical si hay muchas obras */
+            background: radial-gradient(circle at top, #2b333a 0%, #0d1115 100%);
+            overflow-y: auto;
             align-items: center;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
         }
 
         .censored-gallery {
-            background-color: #0a0a0a;
+            background: radial-gradient(circle at top, #240b0b 0%, #080202 100%);
         }
 
         .gallery-header {
             text-align: center;
             width: 100%;
-            padding: 80px 20px 30px;
+            padding: 90px 20px 40px;
             position: relative;
         }
 
         .gallery-header h2 {
             color: #d4af37;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.9);
         }
 
         .censored-gallery .gallery-header h2 {
-            color: #666;
+            color: #888;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.9);
         }
 
         .warning-banner {
-            color: #ff4444;
+            color: #ff5555;
+            font-family: 'Roboto', sans-serif;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 20px;
-            padding: 15px;
-            border: 2px solid #ff4444;
+            padding: 12px 25px;
+            border: 1px solid #ff5555;
             background-color: rgba(255, 0, 0, 0.1);
             display: inline-block;
-            border-radius: 5px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255,0,0,0.2);
         }
 
-        /* Contenedor de Obras */
+        /* Obras de arte */
         .artworks-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 50px;
-            max-width: 1200px;
+            gap: 70px;
+            max-width: 1400px;
             width: 100%;
+            padding: 0 40px;
         }
 
         .artwork-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 320px;
+            width: 350px;
         }
 
         .frame {
-            background-color: #000;
-            padding: 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.2);
-            border: 10px solid #4a3b2c; /* Color de marco de madera */
-            margin-bottom: 20px;
+            /* Efecto de marco de madera con paspartú blanco interior */
+            background-color: #f8f8f8;
+            padding: 40px 40px 50px 40px; /* Paspartú más ancho abajo */
+            box-shadow: 15px 25px 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.1);
+            border: 15px solid #2b1d11; /* Color madera oscura */
+            border-radius: 2px;
+            margin-bottom: 25px;
+            position: relative;
         }
 
         .censored-gallery .frame {
-            border-color: #1a1a1a; /* Marco oscuro y desgastado para censura */
+            border-color: #111; /* Marco negro mate para la zona censurada */
+            background-color: #e0e0e0;
         }
 
         .frame img {
             display: block;
             max-width: 100%;
             height: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Sombra interna sobre el lienzo */
         }
 
-        /* Placa descriptiva */
+        /* Placa descriptiva estilo museo */
         .placard {
-            background-color: #e8e8e8;
+            background: linear-gradient(135deg, #e8e8e8, #d0d0d0);
             color: #222;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 2px;
-            text-align: left;
-            width: 90%;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-            font-family: 'Arial', sans-serif;
+            text-align: center;
+            width: 85%;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.5);
+            border: 1px solid #aaa;
+            position: relative;
         }
+
+        /* Remaches en las esquinas de la placa */
+        .placard::before, .placard::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #666;
+            border-radius: 50%;
+            top: 5px;
+        }
+        .placard::before { left: 5px; }
+        .placard::after { right: 5px; }
 
         .placard h4 {
-            margin-bottom: 8px;
-            font-size: 1.2rem;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: #111;
+            border-bottom: 1px solid #999;
+            padding-bottom: 8px;
         }
 
         .placard p {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            line-height: 1.4;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            line-height: 1.5;
+            color: #333;
         }
     </style>
 </head>
 <body>
-
-    <!-- ==========================================
-         AQUÍ EMPIEZA LA ESTRUCTURA HTML
-         ========================================== -->
 
     <!-- VISTA 1: ENTRADA -->
     <div id="view-entrada" class="view active">
         <div class="entrance-container">
             <h1>Museo Nacional de Colombia</h1>
             <div class="entrance-buttons">
-                <!-- Enlace para volver al mapa (Cambia mapa.html por el enlace real) -->
+                <!-- Enlace para volver al mapa (Cambia mapa.html por tu archivo real) -->
                 <a href="mapa.html" class="btn-secondary">Volver al mapa</a>
                 
+                <!-- Botón para entrar al museo -->
                 <button onclick="switchView('view-lobby')">Entrar al Museo</button>
             </div>
         </div>
     </div>
 
-    <!-- VISTA 2: SELECCIÓN (Lobby) -->
+    <!-- VISTA 2: SELECCIÓN -->
     <div id="view-lobby" class="view">
         <button class="back-btn" onclick="switchView('view-entrada')">Volver a la entrada</button>
         <h2>Pasillo Principal</h2>
@@ -348,7 +443,7 @@
             <div class="artwork-wrapper">
                 <div class="frame">
                     <img src="https://picsum.photos/300/400?random=10" alt="Obra Censurada 1">
-                    </div>
+                </div>
                 <div class="placard">
                     <h4>Realidad Oculta</h4>
                     <p><strong>Autor:</strong> Artista Disidente</p>
@@ -370,25 +465,24 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         AQUÍ VA EL FUNCIONAMIENTO (JAVASCRIPT)
-         ========================================== -->
+    <!-- Lógica de navegación -->
     <script>
-        // Función para cambiar de vistas
         function switchView(viewId) {
             const views = document.querySelectorAll('.view');
             
-            // Oculta todas las vistas
+            // Efecto de desvanecimiento
             views.forEach(view => {
                 view.classList.remove('active');
             });
             
-            // Muestra la vista seleccionada
-            const targetView = document.getElementById(viewId);
-            if (targetView) {
-                targetView.classList.add('active');
-                window.scrollTo(0, 0); 
-            }
+            // Muestra la vista seleccionada después de un milisegundo para aplicar transición
+            setTimeout(() => {
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.add('active');
+                    window.scrollTo(0, 0); 
+                }
+            }, 50);
         }
     </script>
 </body>
