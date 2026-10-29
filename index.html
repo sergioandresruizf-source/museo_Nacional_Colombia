@@ -19,36 +19,36 @@
         body {
             font-family: 'Lato', sans-serif;
             margin: 0;
-            overflow: hidden; /* Previene scroll general, lo manejaremos por vistas */
             background-color: #000;
+            overflow-x: hidden; /* Permite scroll vertical y bloquea solo el horizontal general */
         }
 
         h1, h2, h3, h4, .font-serif {
             font-family: 'Playfair Display', serif;
         }
 
-        /* --- Sistema de Vistas --- */
+        /* --- Sistema de Vistas Corregido para Móvil --- */
         .view-section {
-            position: absolute !important; /* Fuerza la posición para que no se desplacen fuera de pantalla */
+            position: absolute !important;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh; /* Permite que crezca si el contenido es más alto que la pantalla */
             opacity: 0;
-            visibility: hidden; /* Asegura que no interactúen cuando están ocultas */
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
-            transform: scale(0.98);
-            overflow: hidden; /* Evita scrolls inesperados */
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
             z-index: 1;
+            overflow-y: auto; /* Habilita el desplazamiento vertical en celulares */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* Mejora la fluidez del scroll en iOS/Android */
         }
 
         .view-section.active {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
-            transform: scale(1);
-            z-index: 10; /* Coloca la vista actual por encima de las demás */
+            z-index: 10;
         }
 
         /* --- Fondos y Entornos --- */
@@ -69,7 +69,7 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 25vh; /* Altura del piso */
+            height: 25vh;
             background: linear-gradient(to bottom, #111 0%, transparent 15%), 
                         repeating-linear-gradient(to right, var(--wood-color-1), var(--wood-color-1) 100px, var(--wood-color-2) 100px, var(--wood-color-2) 102px);
             z-index: -1;
@@ -84,7 +84,7 @@
             overflow-x: auto;
             overflow-y: hidden;
             height: 100%;
-            padding: 10vh 5vw 30vh 5vw; /* Espacio para el piso y arriba */
+            padding: 10vh 5vw 30vh 5vw;
             scroll-snap-type: x mandatory;
             align-items: center;
             gap: 10vw;
@@ -145,7 +145,6 @@
             box-shadow: 10px 15px 30px rgba(0,0,0,0.8), inset 0 0 50px rgba(0,0,0,0.8);
         }
 
-        /* Imágenes dentro del marco */
         .frame img {
             width: 100%;
             height: 100%;
@@ -176,21 +175,17 @@
 
         /* Barras de scroll estéticas */
         ::-webkit-scrollbar {
-            height: 12px;
-            width: 12px;
+            height: 8px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.1);
         }
         ::-webkit-scrollbar-thumb {
             background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-        }
-        .wall-censored ::-webkit-scrollbar-thumb {
-            background: rgba(255,0,0,0.2);
+            border-radius: 4px;
         }
 
-        /* Botón animado de entrada */
         .enter-btn {
             transition: all 0.3s ease;
         }
@@ -206,22 +201,20 @@
          VISTA 1: ENTRADA AL MUSEO
          ========================================== -->
     <section id="view-entrance" class="view-section active flex flex-col items-center justify-center bg-stone-900 text-white relative">
-        <!-- Fondo de entrada -->
         <div class="absolute inset-0 bg-[url('https://placehold.co/1920x1080/2a2a2a/1a1a1a?text=Fachada+Museo')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
         
-        <div class="relative z-10 text-center px-4 max-w-4xl">
+        <div class="relative z-10 text-center px-4 max-w-4xl py-12">
             <p class="text-sm md:text-lg tracking-[0.3em] uppercase text-gray-400 mb-4">Ministerio de Cultura</p>
             <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">Museo Nacional<br><span class="text-3xl md:text-5xl text-yellow-500 font-light italic">de Colombia</span></h1>
             <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
                 Bienvenido a la experiencia virtual. Un recorrido por nuestra historia, nuestras memorias y los silencios que han marcado nuestra cultura.
             </p>
             
-            <!-- Botones de la entrada: Entrar al museo y el nuevo enlace para Volver al mapa -->
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <button onclick="navigateTo('view-lobby')" class="enter-btn px-10 py-4 bg-transparent border border-white text-white font-serif text-xl tracking-widest uppercase hover:bg-white hover:text-black">
                     Entrar al Museo
                 </button>
-                <a href="https://sergioandresruizf-source.github.io/museos_Bogota/" class="enter-btn px-8 py-4 bg-transparent border border-stone-500 text-stone-300 font-serif text-lg tracking-widest uppercase hover:bg-stone-800 hover:text-white transition text-center">
+                <a href="mapa.html" class="enter-btn px-8 py-4 bg-transparent border border-stone-500 text-stone-300 font-serif text-lg tracking-widest uppercase hover:bg-stone-800 hover:text-white transition text-center">
                     Volver al mapa
                 </a>
             </div>
@@ -230,20 +223,20 @@
 
 
     <!-- ==========================================
-         VISTA 2: VESTÍBULO (LOBBY)
+         VISTA 2: VESTÍBULO (LOBBY) - Ajustado para móvil
          ========================================== -->
     <section id="view-lobby" class="view-section bg-stone-200">
         <div class="absolute inset-0 wall-normal opacity-50 z-0"></div>
         <div class="wooden-floor"></div>
 
-        <div class="relative z-10 container mx-auto h-full flex flex-col items-center pt-20 px-4">
+        <div class="relative z-10 container mx-auto flex flex-col items-center py-16 px-4 min-h-full">
             <h2 class="text-4xl md:text-5xl font-serif text-stone-800 mb-4 text-center border-b border-stone-400 pb-4">Vestíbulo Principal</h2>
-            <p class="text-stone-600 text-center mb-16 max-w-xl text-lg">Por favor, seleccione la sala que desea visitar. Cada ruta ofrece una perspectiva diferente de nuestra colección histórica.</p>
+            <p class="text-stone-600 text-center mb-12 max-w-xl text-lg">Por favor, seleccione la sala que desea visitar. Cada ruta ofrece una perspectiva diferente de nuestra colección histórica.</p>
 
-            <div class="flex flex-col md:flex-row gap-8 md:gap-16 w-full max-w-5xl justify-center">
+            <div class="flex flex-col md:flex-row gap-8 md:gap-16 w-full max-w-5xl justify-center items-center pb-8">
                 
                 <!-- Puerta: Exposiciones Normales -->
-                <div onclick="navigateTo('view-exposiciones')" class="cursor-pointer group flex-1 bg-white p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-yellow-600 rounded-sm flex flex-col items-center text-center">
+                <div onclick="navigateTo('view-exposiciones')" class="cursor-pointer group w-full max-w-sm md:flex-1 bg-white p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-yellow-600 rounded-sm flex flex-col items-center text-center">
                     <div class="w-24 h-24 rounded-full bg-stone-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <svg class="w-12 h-12 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
@@ -252,7 +245,7 @@
                 </div>
 
                 <!-- Puerta: Censura -->
-                <div onclick="navigateTo('view-censura')" class="cursor-pointer group flex-1 bg-stone-900 p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-red-700 rounded-sm flex flex-col items-center justify-center text-center">
+                <div onclick="navigateTo('view-censura')" class="cursor-pointer group w-full max-w-sm md:flex-1 bg-stone-900 p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-t-8 border-red-700 rounded-sm flex flex-col items-center justify-center text-center">
                     <div class="w-24 h-24 rounded-full bg-stone-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <span class="text-5xl">🚫</span>
                     </div>
@@ -262,7 +255,7 @@
             </div>
 
             <!-- Botón Volver a Entrada -->
-            <button onclick="navigateTo('view-entrance')" class="mt-16 text-stone-500 hover:text-stone-800 transition-colors flex items-center gap-2 font-bold text-lg">
+            <button onclick="navigateTo('view-entrance')" class="mt-8 mb-12 text-stone-600 hover:text-stone-900 transition-colors flex items-center gap-2 font-bold text-lg">
                 <span class="text-2xl">&larr;</span> Volver a la pantalla anterior (Entrada)
             </button>
         </div>
@@ -275,19 +268,16 @@
     <section id="view-exposiciones" class="view-section wall-normal relative">
         <div class="wooden-floor"></div>
 
-        <!-- Encabezado de la Sala -->
         <div class="absolute top-0 left-0 w-full p-6 z-20 flex justify-between items-center bg-gradient-to-b from-white to-transparent">
             <button onclick="navigateTo('view-lobby')" class="px-4 py-2 bg-stone-800 text-white rounded text-sm hover:bg-stone-600 transition shadow-lg flex items-center gap-2">
                 <span class="text-lg">&larr;</span> Volver a la selección
             </button>
-            <h2 class="text-2xl md:text-3xl font-serif text-stone-800 drop-shadow-md">Sala de Exposiciones Permanentes</h2>
-            <div class="w-40"></div> <!-- Spacer para centrar el titulo -->
+            <h2 class="text-2xl md:text-3xl font-serif text-stone-800 drop-shadow-md text-right md:text-center">Sala de Exposiciones</h2>
+            <div class="w-10 md:w-40"></div>
         </div>
 
-        <!-- Galería Horizontal -->
         <div class="gallery-container relative z-10" id="exposiciones-gallery">
             
-            <!-- OBRA 1 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
@@ -300,7 +290,6 @@
                 </div>
             </div>
 
-            <!-- OBRA 2 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
@@ -313,20 +302,18 @@
                 </div>
             </div>
 
-            <!-- OBRA 3 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
                     <img src="https://picsum.photos/seed/ceramica/400/500" alt="Cerámica Precolombina" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
                 </div>
                 <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Poporo Quimbaya (Réplica visual)</h4>
+                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Poporo Quimbaya</h4>
                     <p class="text-sm font-bold text-stone-600 mb-3">Cultura Quimbaya, 300 d.C.</p>
                     <p class="text-sm text-stone-500 leading-relaxed">Representación de las maestras obras de orfebrería de las culturas prehispánicas, símbolo del patrimonio cultural y la identidad indígena de Colombia.</p>
                 </div>
             </div>
 
-            <!-- OBRA 4 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
@@ -339,20 +326,18 @@
                 </div>
             </div>
             
-            <!-- OBRA 5 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
                     <img src="https://picsum.photos/seed/botanica/400/500" alt="Expedición Botánica" onerror="this.src='https://placehold.co/400x500/3e2723/ffffff?text=Error'">
                 </div>
                 <div class="placard placard-normal">
-                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Lámina de la Flora de la Real Expedición</h4>
+                    <h4 class="font-serif font-bold text-xl mb-1 text-stone-800">Lámina de la Flora</h4>
                     <p class="text-sm font-bold text-stone-600 mb-3">Taller de José Celestino Mutis, 1790</p>
                     <p class="text-sm text-stone-500 leading-relaxed">Detallada ilustración científica que muestra la inmensa biodiversidad del Virreinato de la Nueva Granada, uniendo ciencia y arte.</p>
                 </div>
             </div>
 
-            <!-- OBRA 6 -->
             <div class="artwork-wrapper">
                 <div class="spotlight"></div>
                 <div class="frame frame-gold">
@@ -365,7 +350,6 @@
                 </div>
             </div>
 
-            <!-- Espacio final para scroll -->
             <div class="flex-shrink-0 w-20"></div>
         </div>
     </section>
@@ -377,7 +361,6 @@
     <section id="view-censura" class="view-section wall-censored relative">
         <div class="wooden-floor" style="filter: brightness(0.4);"></div>
 
-        <!-- Encabezado de la Sala -->
         <div class="absolute top-0 left-0 w-full p-6 z-20 flex justify-between items-center bg-gradient-to-b from-black to-transparent">
             <button onclick="navigateTo('view-lobby')" class="px-4 py-2 bg-stone-200 text-stone-900 rounded text-sm hover:bg-white transition shadow-lg flex items-center gap-2">
                 <span class="text-lg">&larr;</span> Volver a la selección
@@ -385,13 +368,11 @@
             <h2 class="text-2xl md:text-3xl font-serif text-red-500 drop-shadow-md flex items-center gap-2">
                 <span>🚫</span> Sala de Censura
             </h2>
-            <div class="w-40"></div> <!-- Spacer -->
+            <div class="w-10 md:w-40"></div>
         </div>
 
-        <!-- Galería Horizontal Oscura -->
         <div class="gallery-container relative z-10" id="censura-gallery">
             
-            <!-- Letrero de Advertencia Inicial -->
             <div class="artwork-wrapper" style="justify-content: center; padding-right: 5vw;">
                 <div class="bg-stone-900 border-l-4 border-red-700 p-10 shadow-2xl relative text-center min-w-[300px]">
                     <div class="text-red-500 text-6xl mb-6">⚠️</div>
@@ -401,7 +382,6 @@
                 </div>
             </div>
 
-            <!-- OBRA CENSURADA 1 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -409,12 +389,11 @@
                 </div>
                 <div class="placard placard-censored">
                     <h4 class="font-serif font-bold text-xl mb-1 text-red-400">Los Rostros del Silencio</h4>
-                    <p class="text-sm font-bold text-stone-400 mb-3">Alejandro Obregón (Aproximación), 1962</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Ocultada durante años por representar explícitamente el dolor del periodo conocido como "La Violencia". Las autoridades consideraron que incitaba al odio partidista.</p>
+                    <p class="text-sm font-bold text-stone-400 mb-3">Alejandro Obregón, 1962</p>
+                    <p class="text-sm text-stone-300 leading-relaxed">Ocultada durante años por representar explícitamente el dolor del periodo conocido como "La Violencia". Las autoridades consideraron que incitaba al odio.</p>
                 </div>
             </div>
 
-            <!-- OBRA CENSURADA 2 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -423,11 +402,10 @@
                 <div class="placard placard-censored">
                     <h4 class="font-serif font-bold text-xl mb-1 text-red-400">Fotografía: Zona Bananera</h4>
                     <p class="text-sm font-bold text-stone-400 mb-3">Archivo Desconocido, 1928</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Registro fotográfico de las protestas obreras antes de la masacre. El gobierno de la época confiscó y destruyó las copias originales para encubrir la magnitud del evento.</p>
+                    <p class="text-sm text-stone-300 leading-relaxed">Registro fotográfico de las protestas obreras antes de la masacre. El gobierno confiscó y destruyó las copias originales para encubrir la magnitud.</p>
                 </div>
             </div>
 
-            <!-- OBRA CENSURADA 3 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -436,11 +414,10 @@
                 <div class="placard placard-censored">
                     <h4 class="font-serif font-bold text-xl mb-1 text-red-400">El Dictador de Papel</h4>
                     <p class="text-sm font-bold text-stone-400 mb-3">Ricardo Rendón, 1930</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Caricatura que ridiculizaba la corrupción militar y política. Fue prohibida su circulación en la prensa nacional y resultó en el exilio temporal de sus promotores.</p>
+                    <p class="text-sm text-stone-300 leading-relaxed">Caricatura que ridiculizaba la corrupción militar y política. Fue prohibida su circulación en la prensa nacional y resultó en el exilio temporal.</p>
                 </div>
             </div>
 
-            <!-- OBRA CENSURADA 4 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -453,7 +430,6 @@
                 </div>
             </div>
             
-            <!-- OBRA CENSURADA 5 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -462,11 +438,10 @@
                 <div class="placard placard-censored">
                     <h4 class="font-serif font-bold text-xl mb-1 text-red-400">El Deseo Culpable</h4>
                     <p class="text-sm font-bold text-stone-400 mb-3">Anónimo, Finales del Siglo XIX</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Retirada de las galerías bogotanas por la iglesia en 1890, acusada de ser una "provocación a la moral y las buenas costumbres de las señoritas" por mostrar piel al descubierto.</p>
+                    <p class="text-sm text-stone-300 leading-relaxed">Retirada de las galerías bogotanas por la iglesia en 1890, acusada de ser una provocación a la moral y las buenas costumbres de la época.</p>
                 </div>
             </div>
 
-            <!-- OBRA CENSURADA 6 -->
             <div class="artwork-wrapper">
                 <div class="spotlight spotlight-censored"></div>
                 <div class="frame frame-dark bg-stone-900">
@@ -475,33 +450,24 @@
                 <div class="placard placard-censored">
                     <h4 class="font-serif font-bold text-xl mb-1 text-red-400">La Voz del Oprimido</h4>
                     <p class="text-sm font-bold text-stone-400 mb-3">Imprenta Clandestina, 1970</p>
-                    <p class="text-sm text-stone-300 leading-relaxed">Cartel incautado durante las redadas estudiantiles. Documenta los intentos del arte urbano por denunciar abusos de poder, censurado sistemáticamente en los muros de la capital.</p>
+                    <p class="text-sm text-stone-300 leading-relaxed">Cartel incautado durante las redadas estudiantiles. Documenta los intentos del arte urbano por denunciar abusos de poder.</p>
                 </div>
             </div>
 
-            <!-- Espacio final para scroll -->
             <div class="flex-shrink-0 w-20"></div>
         </div>
     </section>
 
     <!-- Script de Navegación -->
     <script>
-        /**
-         * Función para cambiar entre vistas simulando el caminar por el museo.
-         * Oculta todas las secciones y muestra solo la sección de destino (targetId).
-         */
         function navigateTo(targetId) {
-            // 1. Obtener todas las secciones de vista
             const views = document.querySelectorAll('.view-section');
-            
-            // 2. Quitar la clase 'active' a todas
             views.forEach(view => {
                 view.classList.remove('active');
             });
             
             const targetView = document.getElementById(targetId);
             
-            // 3. Si la vista es una sala, reiniciar el scroll horizontal al inicio
             if (targetId === 'view-exposiciones') {
                 const gallery = document.getElementById('exposiciones-gallery');
                 if (gallery) gallery.scrollLeft = 0;
@@ -510,9 +476,9 @@
                 if (gallery) gallery.scrollLeft = 0;
             }
 
-            // 4. Activar la nueva vista de forma inmediata (la transición suave la maneja el CSS)
             if (targetView) {
                 targetView.classList.add('active');
+                targetView.scrollTop = 0; // Reinicia el scroll vertical al cambiar de vista en móvil
             }
         }
     </script>
